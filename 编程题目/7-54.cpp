@@ -1,9 +1,7 @@
-#include <iostream>
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-vector<char> match_stack;  // 使用vector作为符号栈
+stack<char> match_stack;
 
 // 检查当前右符号和栈顶符号是否匹配
 void IfMatch(char left, char right) {
@@ -14,13 +12,13 @@ void IfMatch(char left, char right) {
             cout << "NO\n?-" << right;
         }
         exit(0);
-    } else if (match_stack.back() == left) {  // 配对成功
-        match_stack.pop_back();
+    } else if (match_stack.top() == left) {  // 配对成功
+        match_stack.pop();
     } else {  // 配对失败
-        if (match_stack.back() == '<') {
+        if (match_stack.top() == '<') {
             cout << "NO\n/*-?";
         } else {
-            cout << "NO\n" << match_stack.back() << "-?";
+            cout << "NO\n" << match_stack.top() << "-?";
         }
         exit(0);
     }
@@ -28,13 +26,13 @@ void IfMatch(char left, char right) {
 
 int main() {
     string str;
-    
+
     while (cin >> str && str != ".") {
         for (size_t i = 0; i < str.length(); ++i) {
             if (str[i] == '(' || str[i] == '[' || str[i] == '{') {
-                match_stack.push_back(str[i]);  // 左符号入栈
+                match_stack.push(str[i]);  // 左符号入栈
             } else if (str[i] == '/' && i + 1 < str.length() && str[i + 1] == '*') {
-                match_stack.push_back('<');  // 注释符换成 < 入栈
+                match_stack.push('<');  // 注释符换成 < 入栈
                 ++i;
             } else if (str[i] == ')') {
                 IfMatch('(', str[i]);
@@ -52,10 +50,10 @@ int main() {
     if (match_stack.empty()) {
         cout << "YES";
     } else {
-        if (match_stack.back() == '<') {
+        if (match_stack.top() == '<') {
             cout << "NO\n/*-?";
         } else {
-            cout << "NO\n" << match_stack.back() << "-?";
+            cout << "NO\n" << match_stack.top() << "-?";
         }
     }
 
